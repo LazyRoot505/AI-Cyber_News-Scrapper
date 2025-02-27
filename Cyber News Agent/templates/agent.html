@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberNews Hub | AI Agent Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/agent.css">
+</head>
+<body class="light-theme">
+    <div class="agent-container">
+        <header class="agent-header">
+            <div class="cyber-logo">
+                <div class="glitch" data-text="CYBERNEWS">CYBERNEWS</div>
+                <div class="logo-glow"></div>
+            </div>
+            <div class="theme-control">
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span class="theme-text">Dark Mode</span>
+                </button>
+            </div>
+            <a href="/search" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Search
+            </a>
+            <div class="question-info">
+                <span class="category" id="questionCategory">
+                    <i class="fas fa-shield-alt"></i>
+                    Loading...
+                </span>
+            </div>
+        </header>
+
+        <main class="agent-content">
+            <article class="question-detail">
+                <h1 id="questionTitle">Loading question...</h1>
+                <div class="meta-info">
+                    <span class="severity" id="questionSeverity">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Analyzing...
+                    </span>
+                    <span class="date" id="questionDate">
+                        <i class="fas fa-clock"></i>
+                        Calculating...
+                    </span>
+                </div>
+                <div class="tags" id="questionTags">
+                    <!-- Tags will be populated dynamically -->
+                </div>
+            </article>
+
+            <section class="analysis-section">
+                <div class="threat-analysis">
+                    <h2><i class="fas fa-chart-line"></i> Threat Analysis</h2>
+                    <div class="analysis-grid">
+                        <div class="analysis-card risk-level">
+                            <h3>Risk Level</h3>
+                            <div class="risk-meter">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="progress-bg" cx="50" cy="50" r="45"/>
+                                    <circle class="progress-ring" cx="50" cy="50" r="45"/>
+                                </svg>
+                                <span class="risk-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="analysis-card impact-score">
+                            <h3>Impact Score</h3>
+                            <div class="score-bars">
+                                <!-- Impact bars will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detailed-response">
+                    <h2><i class="fas fa-brain"></i> AI Analysis</h2>
+                    <div class="response-sections" id="responseSections">
+                        <div class="response-intro">
+                            <div class="ai-badge">
+                                <i class="fas fa-robot"></i>
+                                AI AGENT ANALYSIS
+                            </div>
+                            <div class="confidence-score">
+                                <div class="score-ring">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle class="score-bg" cx="50" cy="50" r="45"/>
+                                        <circle class="score-progress" cx="50" cy="50" r="45"/>
+                                    </svg>
+                                    <span class="score-value">0%</span>
+                                </div>
+                                <span class="score-label">Confidence Score</span>
+                            </div>
+                        </div>
+                        <!-- Response sections will be populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="visualization-section">
+                    <h2><i class="fas fa-chart-network"></i> Threat Visualization</h2>
+                    <div class="graph-container" id="threatGraph">
+                        <!-- Graphs will be rendered here -->
+                    </div>
+                </div>
+
+                <div class="mitigation-steps">
+                    <h2><i class="fas fa-shield-alt"></i> Mitigation Strategy</h2>
+                    <div class="steps-container" id="mitigationSteps">
+                        <!-- Steps will be populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <section class="related-questions">
+                <h2><i class="fas fa-link"></i> Related Questions</h2>
+                <div class="related-container" id="relatedQuestions">
+                    <!-- Related questions will be populated dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Add D3.js for advanced graphs -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="/static/js/agent.js"></script>
+</body>
+</html>

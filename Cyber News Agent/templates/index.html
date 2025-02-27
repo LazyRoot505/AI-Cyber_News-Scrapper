@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberNews Hub | Real-time Threat Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Advanced Header -->
+        <header class="main-header">
+            <div class="cyber-logo">
+                <div class="logo-icon"></div>
+            </div>
+            <div class="navbar-buttons">
+                <div class="live-indicator">
+                    <span>Live Updates</span>
+                </div>
+                <button class="nav-btn active" data-category="overview">
+                    <i class="fas fa-globe"></i>
+                    Overview
+                    <div class="status-dot"></div>
+                </button>
+                <button class="nav-btn pulse" data-category="critical">
+                    <i class="fas fa-radiation"></i>
+                    Critical Alerts
+                    <span class="badge danger">0</span>
+                </button>
+                <button class="nav-btn" data-category="trending">
+                    <i class="fas fa-chart-line"></i>
+                    Trending
+                    <span class="badge warning">0</span>
+                </button>
+                <button class="nav-btn" data-category="bookmarked">
+                    <i class="fas fa-bookmark"></i>
+                    Saved
+                    <span class="badge info">0</span>
+                </button>
+            </div>
+            
+            <div class="header-controls">
+                <!-- Advanced Search -->
+                <div class="search-wrapper">
+                    <a href="/search" class="search-toggle">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </div>
+                
+                <!-- Refresh Control -->
+                <button class="btn-refresh" onclick="refreshFeed()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="refresh-status">Updated</span>
+                </button>
+                
+                <!-- View Controls -->
+                <div class="view-controls">
+                    <button class="control-btn active" data-view="grid">
+                        <i class="fas fa-th-large"></i>
+                        Grid
+                    </button>
+                    <button class="control-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                        List
+                    </button>
+                    <button class="control-btn" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                        <span class="theme-text">Dark Mode</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Threat Overview -->
+            <section class="threat-overview">
+                <div class="threat-status">
+                    <div class="threat-meter">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                                stroke-dasharray="75, 100"/>
+                        </svg>
+                        <div class="threat-level" data-level="medium">
+                            <span class="level-text">MEDIUM</span>
+                            <span class="level-score">75</span>
+                        </div>
+                    </div>
+                    <div class="threat-info">
+                        <h3>Current Threat Level</h3>
+                        <div class="threat-stats">
+                            <div class="stat">
+                                <span class="value" id="activeThreatCount">24</span>
+                                <span class="label">Active Threats</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value" id="criticalCount">8</span>
+                                <span class="label">Critical</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-cards">
+                    <div class="metric-card glow">
+                        <div class="metric-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Total Intelligence</h3>
+                            <div class="metric-value" id="totalArticles">0</div>
+                            <div class="metric-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>5.2%</span>
+                            </div>
+                        </div>
+                        <div class="metric-chart"></div>
+                    </div>
+                    
+                    <div class="metric-card glow">
+                        <div class="metric-icon danger">
+                            <i class="fas fa-radiation"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Critical Alerts</h3>
+                            <div class="metric-value" id="criticalAlerts">0</div>
+                            <div class="metric-trend down">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>2.1%</span>
+                            </div>
+                        </div>
+                        <div class="metric-chart"></div>
+                    </div>
+                    
+                    <div class="metric-card glow">
+                        <div class="metric-icon warning">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Trending Threats</h3>
+                            <div class="metric-value" id="trendingCount">0</div>
+                            <div class="metric-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8.3%</span>
+                            </div>
+                        </div>
+                        <div class="metric-chart"></div>
+                    </div>
+                    
+                    <div class="metric-card glow">
+                        <div class="metric-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Resolved Issues</h3>
+                            <div class="metric-value" id="resolvedCount">0</div>
+                            <div class="metric-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12.4%</span>
+                            </div>
+                        </div>
+                        <div class="metric-chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Intelligence Feed -->
+            <section class="intel-feed">
+                <div class="feed-header">
+                    <div class="feed-title">
+                        <h2>Intelligence Feed</h2>
+                        <div class="feed-meta">
+                            <span id="articleCount">0 articles</span>
+                            <span class="dot">•</span>
+                            <span id="lastUpdate">Live</span>
+                        </div>
+                    </div>
+                    <div class="feed-controls">
+                        <div class="sort-control">
+                            <select class="select-modern" id="sortSelect">
+                                <option value="date">Latest First</option>
+                                <option value="priority">Priority</option>
+                                <option value="impact">Impact Score</option>
+                                <option value="trending">Trending</option>
+                            </select>
+                        </div>
+                        <div class="filter-tags">
+                            <button class="tag-btn active">All</button>
+                            <button class="tag-btn">Malware</button>
+                            <button class="tag-btn">Data Breach</button>
+                            <button class="tag-btn">Zero-Day</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="newsGrid" class="news-grid grid-view"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Advanced Loading Overlay -->
+    <div class="loading-overlay" id="loadingState">
+        <div class="cyber-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-core">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+        </div>
+        <h3>Securing Intelligence Feed</h3>
+        <div class="loading-status">
+            <span class="status-text">Analyzing threat patterns...</span>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Content Alert -->
+    <div class="new-content-alert" id="newContentAlert">
+        <i class="fas fa-arrow-up"></i>
+        <span>New updates available</span>
+    </div>
+
+    <script>
+        // View mode and theme toggle handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            // View mode controls
+            const viewControls = document.querySelectorAll('.control-btn[data-view]');
+            const newsGrid = document.getElementById('newsGrid');
+            
+            viewControls.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all view buttons
+                    viewControls.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    // Update grid view class
+                    newsGrid.className = `news-grid ${btn.dataset.view}-view`;
+                });
+            });
+
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeText = themeToggle.querySelector('.theme-text');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+
+            // Set initial state
+            let isDark = false;
+
+            function updateTheme() {
+                isDark = !isDark;
+                body.classList.toggle('dark-theme', isDark);
+                themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-moon';
+                themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                themeToggle.classList.toggle('active', isDark);
+            }
+
+            themeToggle.addEventListener('click', updateTheme);
+        });
+
+        // Helper function for status icons
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'active': return 'radiation';
+                case 'investigating': return 'search';
+                case 'resolved': return 'check-circle';
+                default: return 'info-circle';
+            }
+        }
+
+        // News card template
+        function createNewsCard(article) {
+            const impactScore = article.impact_score || 50;
+            return `
+                <article class="news-card ${article.priority}" 
+                         data-id="${article.id}" 
+                         data-category="${article.category}"
+                         data-impact="${impactScore}">
+                    <div class="card-header">
+                        <div class="source-info">
+                            <img src="${article.source.icon}" alt="${article.source.name}" class="source-icon">
+                            <div class="source-meta">
+                                <span class="source-name">${article.source.name}</span>
+                                <span class="trust-score">
+                                    <i class="fas fa-shield-alt"></i>
+                                    ${article.source.trust_score}% Trusted
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="status-badge ${article.status}">
+                            <i class="fas fa-${getStatusIcon(article.status)}"></i>
+                            ${article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <h3>${article.title}</h3>
+                        <p>${article.summary}</p>
+                        
+                        <div class="article-meta">
+                            <div class="impact-score" style="--score: ${impactScore}">
+                                <span>${impactScore}</span>
+                            </div>
+                            <div class="tags">
+                                ${article.tags.map(tag => 
+                                    `<span class="tag">${tag}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="article-info">
+                            <span class="time">
+                                <i class="far fa-clock"></i>
+                                ${formatDate(article.date)}
+                            </span>
+                            <span class="views">
+                                <i class="far fa-eye"></i>
+                                ${article.views} views
+                            </span>
+                        </div>
+                        
+                        <div class="card-actions">
+                            <button class="btn-action ${article.bookmarked ? 'active' : ''}" 
+                                    onclick="toggleBookmark(${article.id})">
+                                <i class="fas ${article.bookmarked ? 'fa-bookmark' : 'fa-bookmark-o'}"></i>
+                            </button>
+                            <button class="btn-primary" onclick="readArticle(${article.id})">
+                                Read More
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        // Bookmark and read article handlers
+        function toggleBookmark(id) {
+            // Implement bookmark functionality
+            console.log('Toggle bookmark for article:', id);
+        }
+
+            function readArticle(id) {
+                window.location.href = `/article/${id}`;
+            }
+    </script>
+
+    <!-- Load main JavaScript -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

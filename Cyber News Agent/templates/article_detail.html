@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Detail | CyberNews Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Advanced Header -->
+        <header class="main-header">
+            <div class="cyber-logo">
+                <div class="logo-icon"></div>
+            </div>
+            <div class="navbar-buttons">
+                <div class="live-indicator">
+                    <span>Live Updates</span>
+                </div>
+                <button class="nav-btn" data-category="overview" onclick="window.location.href='/'">
+                    <i class="fas fa-globe"></i>
+                    Overview
+                </button>
+            </div>
+            
+            <div class="header-controls">
+                <!-- View Controls -->
+                <div class="view-controls">
+                    <button class="control-btn" onclick="window.location.href='/'">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="control-btn" id="shareBtn">
+                        <i class="fas fa-share-alt"></i>
+                        Share
+                    </button>
+                    <button class="control-btn" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-text">Light Mode</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Content -->
+        <main class="content article-detail">
+            <div class="article-header">
+                <div class="article-meta">
+                    <div class="source-info">
+                        <img src="" alt="" class="source-icon" id="sourceIcon">
+                        <div class="source-meta">
+                            <span class="source-name" id="sourceName"></span>
+                            <span class="trust-score">
+                                <i class="fas fa-shield-alt"></i>
+                                <span id="trustScore">0</span>% Trusted
+                            </span>
+                        </div>
+                    </div>
+                    <div class="article-tags" id="articleTags"></div>
+                </div>
+                <h1 class="article-title" id="articleTitle"></h1>
+                <div class="article-info">
+                    <span class="date" id="articleDate">
+                        <i class="far fa-clock"></i>
+                    </span>
+                    <span class="views" id="articleViews">
+                        <i class="far fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="article-content cyber-glass">
+                <!-- Action Bar -->
+                <div class="action-bar">
+                    <div class="status-badge" id="statusBadge">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        Loading...
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-action" id="bookmarkBtn">
+                            <i class="fas fa-bookmark"></i>
+                            Save
+                        </button>
+                        <button class="btn-primary" id="reportBtn">
+                            <i class="fas fa-flag"></i>
+                            Report Issue
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <section class="content-section summary-section cyber-card">
+                    <div class="section-header">
+                        <i class="fas fa-file-alt"></i>
+                        <h2>Summary</h2>
+                    </div>
+                    <div class="summary-content" id="articleSummary"></div>
+                </section>
+
+                <!-- Key Highlights & Technical Details -->
+                <section class="content-section highlights-section cyber-card" id="highlightsSection">
+                    <div class="section-header">
+                        <i class="fas fa-star"></i>
+                        <h2>Key Highlights & Technical Details</h2>
+                    </div>
+                    <div class="highlights-grid" id="highlights"></div>
+                </section>
+
+                <!-- Main Content Section -->
+                <section class="content-section main-content-section cyber-card">
+                    <div class="section-header">
+                        <i class="fas fa-align-left"></i>
+                        <h2>Full Article</h2>
+                    </div>
+                    <div class="main-content" id="mainContent"></div>
+                </section>
+
+                <!-- Metadata Section -->
+                <section class="content-section metadata-section cyber-card">
+                    <div class="section-header">
+                        <i class="fas fa-tags"></i>
+                        <h2>Metadata</h2>
+                    </div>
+                    <div class="metadata-grid">
+                        <div class="metadata-item">
+                            <span class="label">Priority</span>
+                            <span class="value" id="priority"></span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="label">Status</span>
+                            <span class="value" id="status"></span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="label">Category</span>
+                            <span class="value" id="category"></span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="label">Affected Systems</span>
+                            <span class="value" id="affectedSystems"></span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="label">Patch Available</span>
+                            <span class="value" id="patchStatus"></span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="label">Exploited in Wild</span>
+                            <span class="value" id="exploitStatus"></span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Fetch and display article data
+        async function loadArticle() {
+            const statusBadge = document.getElementById('statusBadge');
+            const articleContent = document.querySelector('.article-content');
+
+            try {
+                const articleId = window.location.pathname.split('/article/')[1];
+                if (!articleId) {
+                    throw new Error('Article ID not found in URL');
+                }
+
+                const response = await fetch(`/api/article/${articleId}`);
+                if (!response.ok) {
+                    throw new Error('Article not found');
+                }
+
+                const article = await response.json();
+                
+                // Update status badge
+                statusBadge.innerHTML = `
+                    <i class="fas fa-${article.status === 'active' ? 'radiation' : 
+                                     article.status === 'resolved' ? 'check-circle' : 
+                                     'exclamation-circle'}"></i>
+                    ${article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+                `;
+                
+                articleContent.style.opacity = '1';
+
+                // Update source information
+                document.getElementById('sourceIcon').src = article.source.icon;
+                document.getElementById('sourceIcon').alt = article.source.name;
+                document.getElementById('sourceName').textContent = article.source.name;
+                document.getElementById('trustScore').textContent = article.source.trust_score;
+
+                // Update article header
+                document.getElementById('articleTitle').textContent = article.title;
+                document.getElementById('articleDate').innerHTML = `
+                    <i class="far fa-clock"></i>
+                    ${formatDate(article.date)}
+                `;
+                document.getElementById('articleViews').innerHTML = `
+                    <i class="far fa-eye"></i>
+                    ${article.views} views
+                `;
+
+                // Update tags
+                const tagsContainer = document.getElementById('articleTags');
+                tagsContainer.innerHTML = '';
+                article.tags.forEach((tag, index) => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'tag';
+                    tagEl.innerHTML = `<i class="fas fa-tag"></i>${tag}`;
+                    tagEl.style.animationDelay = `${index * 0.1}s`;
+                    tagsContainer.appendChild(tagEl);
+                });
+
+                // Update summary
+                document.getElementById('articleSummary').innerHTML = `
+                    <div class="summary-paragraph">
+                        ${article.summary}
+                    </div>
+                `;
+
+                // Parse and organize highlights and technical details
+                const highlightsSection = document.getElementById('highlightsSection');
+                let content = article.content;
+                const techIndex = content.toLowerCase().indexOf('technical details:');
+                
+                if (techIndex !== -1) {
+                    // Extract technical details
+                    const technicalDetails = content.slice(techIndex);
+                    content = content.slice(0, techIndex);
+
+                    // Format technical details
+                    const techLines = technicalDetails.split('\n')
+                        .filter(line => line.trim())
+                        .map(line => line.trim());
+
+                    const techEl = document.createElement('div');
+                    techEl.className = 'technical-content';
+                    techEl.innerHTML = `
+                        <h3 class="tech-heading">${techLines[0]}</h3>
+                        <ul class="tech-list">
+                            ${techLines.slice(1).map(line => 
+                                `<li>${line.replace(/^[-*]\s*/, '')}</li>`
+                            ).join('')}
+                        </ul>
+                    `;
+                    highlightsSection.appendChild(techEl);
+                }
+
+                // Update highlights (from remaining content)
+                const highlights = content.split('\n')
+                    .filter(line => line.trim() && line.match(/^[-*]\s/))
+                    .map(line => line.replace(/^[-*]\s*/, ''))
+                    .slice(0, 4);
+
+                const highlightsContainer = document.getElementById('highlights');
+                highlightsContainer.innerHTML = '';
+                highlights.forEach((highlight, index) => {
+                    const highlightEl = document.createElement('div');
+                    highlightEl.className = 'highlight-card';
+                    highlightEl.style.animationDelay = `${index * 0.15}s`;
+                    highlightEl.innerHTML = `
+                        <span class="highlight-number">${index + 1}</span>
+                        <p>${highlight}</p>
+                    `;
+                    highlightsContainer.appendChild(highlightEl);
+                });
+
+                // Update main content with expanded sections
+                const mainContent = document.getElementById('mainContent');
+                mainContent.innerHTML = `
+                    <h2>Overview</h2>
+                    <p>${article.summary}</p>
+
+                    <h2>Impact Assessment</h2>
+                    <p>The incident affects critical water infrastructure systems across multiple regions. Analysis indicates potential widespread disruption to water treatment and distribution facilities. Current assessment shows:</p>
+                    <ul>
+                        ${article.metrics ? `
+                            <li>Number of affected systems: ${article.metrics.affected_systems.toLocaleString()}</li>
+                            <li>Exploitation status: ${article.metrics.exploited_in_wild ? 'Active exploitation detected' : 'No active exploitation detected'}</li>
+                            <li>Patch status: ${article.metrics.patch_available ? 'Security patches available' : 'Patches pending'}</li>
+                        ` : ''}
+                    </ul>
+
+                    <h2>Detailed Analysis</h2>
+                    ${content.split('\n\n').map(paragraph => {
+                        if (paragraph.startsWith('#')) {
+                            const level = paragraph.match(/^#+/)[0].length;
+                            const text = paragraph.replace(/^#+\s*/, '');
+                            return `<h${level + 1}>${text}</h${level + 1}>`;
+                        } else if (paragraph.match(/^[-*]\s/m)) {
+                            const items = paragraph.split('\n')
+                                .filter(item => item.trim())
+                                .map(item => `<li>${item.replace(/^[-*]\s/, '')}</li>`)
+                                .join('');
+                            return `<ul>${items}</ul>`;
+                        } else {
+                            return `<p>${paragraph}</p>`;
+                        }
+                    }).join('\n')}
+
+                    <h2>Mitigation Strategies</h2>
+                    <p>Based on the analysis, the following mitigation strategies are recommended:</p>
+                    <ul>
+                        <li>Immediate implementation of available security patches</li>
+                        <li>Enhanced monitoring of water treatment system networks</li>
+                        <li>Regular security audits and vulnerability assessments</li>
+                        <li>Implementation of network segmentation and access controls</li>
+                        <li>Employee training on cybersecurity best practices</li>
+                    </ul>
+
+                    <h2>Recommendations</h2>
+                    <p>Organizations in the water sector should:</p>
+                    <ul>
+                        <li>Review and update incident response plans</li>
+                        <li>Coordinate with relevant security agencies and CERT teams</li>
+                        <li>Implement continuous monitoring solutions</li>
+                        <li>Establish backup and recovery procedures</li>
+                    </ul>
+
+                    <h2>Timeline and Updates</h2>
+                    <p>We will continue to monitor this situation and provide updates as new information becomes available. Organizations should maintain vigilance and report any suspicious activities to relevant authorities.</p>
+                `;
+
+                // Update metadata
+                document.getElementById('category').innerHTML = `
+                    <span class="badge ${article.category.toLowerCase()}">${article.category}</span>
+                `;
+                document.getElementById('priority').innerHTML = `
+                    <span class="badge ${article.priority.toLowerCase()}">${article.priority}</span>
+                `;
+                document.getElementById('status').innerHTML = `
+                    <span class="badge ${article.status.toLowerCase()}">${article.status}</span>
+                `;
+                document.getElementById('affectedSystems').innerHTML = `
+                    <span class="metric">${article.metrics.affected_systems.toLocaleString()}</span>
+                `;
+                document.getElementById('patchStatus').innerHTML = `
+                    <span class="badge ${article.metrics.patch_available ? 'success' : 'danger'}">
+                        ${article.metrics.patch_available ? 'Available' : 'Not Available'}
+                    </span>
+                `;
+                document.getElementById('exploitStatus').innerHTML = `
+                    <span class="badge ${article.metrics.exploited_in_wild ? 'danger' : 'success'}">
+                        ${article.metrics.exploited_in_wild ? 'Yes' : 'No'}
+                    </span>
+                `;
+
+            } catch (error) {
+                console.error('Error loading article:', error);
+                statusBadge.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    Error: ${error.message}
+                `;
+                statusBadge.style.backgroundColor = 'var(--danger)';
+                statusBadge.style.color = 'white';
+                
+                articleContent.style.opacity = '0.5';
+                articleContent.style.pointerEvents = 'none';
+            }
+        }
+
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeText = themeToggle.querySelector('.theme-text');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+
+            let isDark = false;
+
+            function updateTheme() {
+                isDark = !isDark;
+                body.classList.toggle('dark-theme', isDark);
+                themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+                themeText.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                themeToggle.classList.toggle('active', isDark);
+            }
+
+            themeToggle.addEventListener('click', updateTheme);
+        });
+
+        // Load article data when page loads
+        document.addEventListener('DOMContentLoaded', loadArticle);
+    </script>
+</body>
+</html>

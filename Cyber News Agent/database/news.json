@@ -1,0 +1,105 @@
+{
+    "feeds": [
+        {
+            "name": "CVE Feed",
+            "url": "https://cve.mitre.org/data/feeds",
+            "category": "vulnerabilities",
+            "trust_score": 95
+        },
+        {
+            "name": "Security Focus",
+            "url": "https://securityfocus.com/feed",
+            "category": "vulnerabilities",
+            "trust_score": 90
+        },
+        {
+            "name": "Krebs on Security",
+            "url": "https://krebsonsecurity.com/feed",
+            "category": "data_privacy",
+            "trust_score": 92
+        },
+        {
+            "name": "Dark Reading",
+            "url": "https://darkreading.com/rss",
+            "category": "network_security",
+            "trust_score": 88
+        },
+        {
+            "name": "Threat Post",
+            "url": "https://threatpost.com/feed",
+            "category": "malware",
+            "trust_score": 89
+        },
+        {
+            "name": "Hacker News",
+            "url": "https://news.ycombinator.com/rss",
+            "category": "technology",
+            "trust_score": 94
+        },
+        {
+            "name": "The Hacker News",
+            "url": "https://thehackernews.com/feeds/posts/default",
+            "category": "cybersecurity",
+            "trust_score": 91
+        },
+        {
+            "name": "Bleeping Computer",
+            "url": "https://www.bleepingcomputer.com/feed/",
+            "category": "malware",
+            "trust_score": 93
+        },
+        {
+            "name": "Zero Day Initiative",
+            "url": "https://www.zerodayinitiative.com/blog?format=rss",
+            "category": "vulnerabilities",
+            "trust_score": 96
+        },
+        {
+            "name": "SANS Internet Storm Center",
+            "url": "https://isc.sans.edu/rssfeed.xml",
+            "category": "network_security",
+            "trust_score": 97
+        }
+    ],
+    "priorities": {
+        "critical": {
+            "keywords": ["zero-day", "critical vulnerability", "remote code execution", "arbitrary code execution", "privilege escalation"],
+            "score_threshold": 85
+        },
+        "high": {
+            "keywords": ["vulnerability", "exploit", "malware", "ransomware", "breach"],
+            "score_threshold": 70
+        },
+        "medium": {
+            "keywords": ["security update", "patch", "advisory", "security fix"],
+            "score_threshold": 50
+        },
+        "low": {
+            "keywords": ["security best practices", "security awareness", "research"],
+            "score_threshold": 30
+        }
+    },
+    "update_intervals": {
+        "critical": 300,
+        "high": 600,
+        "medium": 1800,
+        "low": 3600
+    },
+    "threat_levels": {
+        "high": {
+            "threshold": 80,
+            "color": "#ef4444",
+            "update_interval": 300
+        },
+        "medium": {
+            "threshold": 50,
+            "color": "#f59e0b",
+            "update_interval": 600
+        },
+        "low": {
+            "threshold": 0,
+            "color": "#10b981",
+            "update_interval": 1800
+        }
+    }
+}

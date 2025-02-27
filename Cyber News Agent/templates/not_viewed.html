@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Articles | CyberNews Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Advanced Header -->
+        <header class="main-header">
+            <div class="cyber-logo">
+                <div class="logo-icon"></div>
+            </div>
+            <div class="navbar-buttons">
+                <div class="live-indicator">
+                    <span>Live Updates</span>
+                </div>
+                <button class="nav-btn" data-category="overview" onclick="window.location.href='/'">
+                    <i class="fas fa-globe"></i>
+                    Overview
+                </button>
+                <button class="nav-btn active" data-category="not-viewed">
+                    <i class="fas fa-bell"></i>
+                    New Articles
+                    <span class="badge warning" id="newCount">0</span>
+                </button>
+            </div>
+            
+            <div class="header-controls">
+                <!-- View Controls -->
+                <div class="view-mode">
+                    <button class="btn-view active" data-view="grid">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="btn-view" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                    <div class="theme-indicator"></div>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content">
+            <section class="intel-feed">
+                <div class="feed-header">
+                    <div class="feed-title">
+                        <h2>New Articles</h2>
+                        <div class="feed-meta">
+                            <span id="articleCount">0 articles</span>
+                            <span class="dot">•</span>
+                            <button class="btn-mark-all-read" onclick="markAllAsRead()">
+                                <i class="fas fa-check-double"></i>
+                                Mark all as read
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="newsGrid" class="news-grid grid-view"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Load main JavaScript -->
+    <script src="/static/js/main.js"></script>
+    <script>
+        function markAllAsRead() {
+            // Implement mark all as read functionality
+            console.log('Marking all articles as read');
+            // Update UI and send request to backend
+            document.getElementById('newCount').textContent = '0';
+        }
+    </script>
+</body>
+</html>
